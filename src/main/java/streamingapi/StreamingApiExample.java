@@ -1,6 +1,4 @@
-/* TweetTracker. Copyright (c) Arizona Board of Regents on behalf of Arizona State University
- * @author shamanth
- */
+
 package streamingapi;
 
 import java.io.BufferedReader;
@@ -50,11 +48,6 @@ public class StreamingApiExample {
         OAuthToken = new OAuthTokenSecret(OAuthUtils.ACCESS_TOKEN, OAuthUtils.ACCESS_TOKEN_SECRET);
     }
 
-    /**
-     * Creates a connection to the Streaming Filter API
-     * @param baseUrl the URL for Twitter Filter API
-     * @param outFilePath Location to place the exported file
-     */
     public void createStreamingConnection(String baseUrl, String outFilePath) {
         HttpClient httpClient = new DefaultHttpClient();
         httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, new Integer(90000));
@@ -62,7 +55,7 @@ public class StreamingApiExample {
         consumer.setTokenWithSecret(OAuthToken.getAccessToken(),OAuthToken.getAccessSecret());
         HttpPost httppost = new HttpPost(baseUrl);
         try {
-            httppost.setEntity(new UrlEncodedFormEntity(CreateRequestBody(), "UTF-8"));
+            httppost.setEntity(new UrlEncodedFormEntity(createRequestBody(), "UTF-8"));
         } catch (UnsupportedEncodingException ex) {
             ex.printStackTrace();
         }
@@ -111,13 +104,6 @@ public class StreamingApiExample {
         }
     }
 
-    /**
-     *  Processes a stream of tweets and writes them to a file one tweet per line. Each tweet here is represented by a JSON document.
-     * @param is input stream already connected to the streaming API
-     * @param outFilePath file to put the collected tweets in
-     * @throws InterruptedException
-     * @throws IOException
-     */
     public void processTwitterStream(InputStream is, String outFilePath) {
         BufferedWriter bwrite = null;
         try {
@@ -164,10 +150,6 @@ public class StreamingApiExample {
         sae.createStreamingConnection("https://stream.twitter.com/1.1/statuses/filter.json", outfilepath);
     }
 
-    /**
-     * Reads the file and loads the parameters to be crawled. Expects that the parameters are tab separated values and the
-     * @param filename
-     */
     public void readParameters(String filename) throws IOException {
 
         BufferedReader br = null;
@@ -191,17 +173,17 @@ public class StreamingApiExample {
         }
     }
 
-     private List<NameValuePair> CreateRequestBody() {
+     private List<NameValuePair> createRequestBody() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         if (Keywords != null&&Keywords.size()>0) {
-            params.add(CreateNameValuePair("track", Keywords));
+            params.add(createNameValuePair("track", Keywords));
             System.out.println("keywords = "+Keywords);
         }
         return params;
     }
 
 
-    private NameValuePair CreateNameValuePair(String name, Collection<String> items) {
+    private NameValuePair createNameValuePair(String name, Collection<String> items) {
         StringBuilder sb = new StringBuilder();
         boolean needComma = false;
         for (String item : items) {
